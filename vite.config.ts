@@ -22,7 +22,7 @@ export default defineConfig({
       'figma:asset/2b8bb7dcc03ee542cf1a9d8448c5a59fffed45d6.png': path.resolve(__dirname, './src/assets/2b8bb7dcc03ee542cf1a9d8448c5a59fffed45d6.png'),
       'figma:asset/01582eaa907bcef3e926722dd88ca6521dd03ed1.png': path.resolve(__dirname, './src/assets/01582eaa907bcef3e926722dd88ca6521dd03ed1.png'),
       'figma:asset/d2d28b96d600ee1bfdabfe5a0d3130f6824ffe3b.png': path.resolve(__dirname, './src/assets/d2d28b96d600ee1bfdabfe5a0d3130f6824ffe3b.png'),
-       'figma:asset/9af440f9937d5441f08b66ffc9a3a6aaec6718f1.png': path.resolve(__dirname, './src/assets/9af440f9937d5441f08b66ffc9a3a6aaec6718f1.png'),
+      'figma:asset/9af440f9937d5441f08b66ffc9a3a6aaec6718f1.png': path.resolve(__dirname, './src/assets/9af440f9937d5441f08b66ffc9a3a6aaec6718f1.png'),
       'embla-carousel-react@8.6.0': 'embla-carousel-react',
       'cmdk@1.1.1': 'cmdk',
       'class-variance-authority@0.7.1': 'class-variance-authority',
