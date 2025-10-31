@@ -1,44 +1,25 @@
-# syntax = docker/dockerfile:1
-
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=20.18.0
-FROM node:${NODE_VERSION}-slim as base
-
-LABEL fly_launch_runtime="NodeJS"
-
-# NodeJS app lives here
+# Etapa de build
+FROM node:20.18.0-slim AS build
 WORKDIR /app
 
-# Set production environment
-ENV NODE_ENV=production
+RUN apt-get update -qq && apt-get install -y python-is-python3 pkg-config build-essential && rm -rf /var/lib/apt/lists/*
 
+COPY package*.json ./
+RUN npm ci
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
-
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install -y python-is-python3 pkg-config build-essential 
-
-# Install node modules
-COPY --link package.json .
-RUN npm install --production=false
-
-# Copy application code
-COPY --link . .
-
-# Build application
+COPY . .
 RUN npm run build
 
-# Remove development dependencies
-RUN npm prune --production
+# Etapa de producción
+FROM node:20.18.0-slim AS release
+WORKDIR /app
 
+COPY --from=build /app/build ./build
+COPY --from=build /app/node_modules ./node_modules
+COPY package*.json ./
+COPY server.js ./
 
-# Final stage for app image
-FROM base
+ENV NODE_ENV=production
+EXPOSE 8080
 
-# Copy built application
-COPY --from=build /app /app
-
-# Start the server by default, this can be overwritten at runtime
-CMD [ "npm", "run", "start" ]
+CMD ["npm", "start"]
