@@ -1,0 +1,27 @@
+# Igual que Dockerfile pero con debug entrypoint que imprime package.json
+FROM node:20.18.0-slim AS build
+WORKDIR /app
+
+RUN apt-get update -qq && apt-get install -y python-is-python3 pkg-config build-essential && rm -rf /var/lib/apt/lists/*
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+FROM node:20.18.0-slim AS release
+WORKDIR /app
+
+COPY --from=build /app/build ./build
+COPY --from=build /app/node_modules ./node_modules
+COPY package*.json ./
+COPY server.js ./
+COPY debug-entrypoint.sh ./debug-entrypoint.sh
+RUN chmod +x ./debug-entrypoint.sh
+
+ENV NODE_ENV=production
+EXPOSE 8080
+
+ENTRYPOINT ["./debug-entrypoint.sh"]
+CMD ["npm", "start"]
