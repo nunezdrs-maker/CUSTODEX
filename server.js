@@ -1,4 +1,3 @@
-cat > server.js <<'EOF'
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -26,7 +25,6 @@ app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'ok', time: Date.now() });
 });
 
-// Root + SPA fallback
 app.get('*', (req, res) => {
   const indexPath = path.join(__dirname, 'build', 'index.html');
   if (!fs.existsSync(indexPath)) {
@@ -66,7 +64,5 @@ function gracefulShutdown(signal) {
   });
   setTimeout(() => { log('Force exit'); process.exit(1); }, 10000).unref();
 }
-
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
-EOF
