@@ -3,9 +3,10 @@ const path = require('path');
 
 const app = express();
 
-// Fly inyecta PORT. Si no, revisa FLY_INTERNAL_PORT. Fallback 8080.
+// Fly inyecta PORT; en algunos entornos puede usarse FLY_INTERNAL_PORT.
+// Prioriza PORT, luego FLY_INTERNAL_PORT, luego 8080 por defecto.
 const port = process.env.PORT || process.env.FLY_INTERNAL_PORT || 8080;
-// Escuchar en 0.0.0.0 para aceptar conexiones externas (obligatorio en Fly)
+// Escuchar en 0.0.0.0 para aceptar conexiones externas
 const host = '0.0.0.0';
 
 app.use(express.static(path.join(__dirname, 'build')));
