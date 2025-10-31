@@ -1,12 +1,11 @@
-// https://github.com/nunezdrs-maker/nune/blob/main/server.js
 const express = require('express');
 const path = require('path');
 
 const app = express();
 
-// Preferir PORT (Fly) -> FLY_INTERNAL_PORT -> fallback 8080
+// Fly inyecta PORT. Si no, revisa FLY_INTERNAL_PORT. Fallback 8080.
 const port = process.env.PORT || process.env.FLY_INTERNAL_PORT || 8080;
-// Forzar escucha en 0.0.0.0 (no localhost)
+// Escuchar en 0.0.0.0 para aceptar conexiones externas (obligatorio en Fly)
 const host = '0.0.0.0';
 
 app.use(express.static(path.join(__dirname, 'build')));
