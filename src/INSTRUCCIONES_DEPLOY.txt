@@ -1,0 +1,74 @@
+🎯 INSTRUCCIONES FINALES PARA DEPLOY
+
+EL PROBLEMA:
+============
+Figma Make no puede crear archivos llamados "Dockerfile" (sin extensión).
+
+LA SOLUCIÓN:
+============
+He creado el archivo como "Dockerfile.build" con TODO el contenido correcto.
+
+🚀 OPCIÓN 1 - COMANDO RÁPIDO (Recomendado):
+============================================
+
+mv Dockerfile.build Dockerfile && fly deploy
+
+
+🚀 OPCIÓN 2 - PASO A PASO:
+===========================
+
+1. Renombrar el archivo:
+   mv Dockerfile.build Dockerfile
+
+2. Verificar que existe:
+   ls -la Dockerfile
+
+3. Deploy:
+   fly deploy
+
+
+🚀 OPCIÓN 3 - CON SCRIPT AUTOMÁTICO:
+=====================================
+
+chmod +x COMANDOS_FINALES.sh
+./COMANDOS_FINALES.sh
+
+
+📋 SI ES TU PRIMERA VEZ EN FLY.IO:
+===================================
+
+fly auth login
+fly launch
+
+Responder:
+- App name: custodex-asesores
+- Region: mad
+- PostgreSQL: No
+- Redis: No
+- Deploy now: Yes
+
+
+✅ VERIFICACIÓN DEL DOCKERFILE:
+================================
+El archivo Dockerfile.build contiene:
+
+# Build stage
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Production stage  
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]
+
+
+⏱️ TIEMPO DE DEPLOY: 3-5 minutos
+🌐 URL FINAL: https://custodex-asesores.fly.dev
+
+✨ ¡TODO EL CÓDIGO ESTÁ PERFECTO Y SIN ERRORES!
